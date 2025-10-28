@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ Thống Quản Lý Đoàn Viên</title>
+  <!-- Bootstrap 3 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    #wrapper {
+      width: 100%;
+    }
+    
+    #sidebar-wrapper {
+      width: 250px;
+      background-color: #23282d;
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+    
+    #page-content-wrapper {
+      margin-left: 250px;
+      padding: 20px;
+    }
+    
+    .sidebar-brand {
+      height: 65px;
+      font-size: 18px;
+      line-height: 60px;
+      padding-left: 20px;
+      background-color: #337ab7;
+      color: white;
+    }
+    
+    .sidebar-nav {
+      padding: 0;
+      list-style: none;
+    }
+    
+    .sidebar-nav li {
+      line-height: 40px;
+    }
+    
+    .sidebar-nav li a {
+      display: block;
+      text-decoration: none;
+      color: #eee;
+      padding-left: 20px;
+    }
+    
+    .sidebar-nav li a:hover {
+      text-decoration: none;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .sidebar-nav li a i {
+      margin-right: 10px;
+    }
+    
+    .sidebar-nav li.active a {
+      background-color: #337ab7;
+      color: white;
+    }
+    
+    .submenu {
+      padding-left: 0;
+      list-style: none;
+      background-color: #32373c;
+      display: none;
+    }
+    
+    .submenu li a {
+      padding-left: 45px;
+    }
+    
+    .has-submenu.open .submenu {
+      display: block;
+    }
+    
+    .has-submenu > a:after {
+      content: "\f107";
+      font-family: 'FontAwesome';
+      float: right;
+      margin-right: 20px;
+    }
+    
+    .has-submenu.open > a:after {
+      content: "\f106";
+    }
+    
+    .top-bar {
+      background-color: #32373c;
+      height: 50px;
+      color: white;
+      padding: 0 20px;
+    }
+    
+    .top-bar .dropdown {
+      display: inline-block;
+      margin-top: 10px;
+    }
+    
+    .top-bar .dropdown-menu {
+      margin-top: 10px;
+    }
+    
+    .welcome-panel {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 3px;
+      box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    }
+    
+    .dashboard-widgets {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px;
+    }
+    
+    .dashboard-widget {
+      flex: 1 0 300px;
+      margin: 0 10px 20px;
+      background-color: white;
+      border-radius: 3px;
+      box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    }
+    
+    .dashboard-widget-header {
+      border-bottom: 1px solid #eee;
+      padding: 10px 15px;
+      font-weight: bold;
+      color: #23282d;
+    }
+    
+    .dashboard-widget-content {
+      padding: 15px;
+    }
+    
+    .quick-stats {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px 20px;
+    }
+    
+    .stat-box {
+      flex: 1 0 200px;
+      margin: 0 10px 10px;
+      padding: 15px;
+      background-color: white;
+      border-left: 4px solid #337ab7;
+      box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    }
+    
+    .stat-box h3 {
+      margin-top: 0;
+      font-size: 24px;
+    }
+    
+    .stat-box p {
+      margin-bottom: 0;
+      color: #777;
+    }
+    
+    .activity-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .activity-list li {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .activity-list li:last-child {
+      border-bottom: none;
+    }
+    
+    .activity-list .activity-time {
+      color: #777;
+      font-size: 12px;
+    }
+    
+    .btn-primary {
+      background-color: #337ab7;
+      border-color: #337ab7;
+    }
+    
+    .btn-primary:hover, .btn-primary:focus {
+      background-color: #337ab7;
+      border-color: #337ab7;
+    }
+    
+    .panel-primary > .panel-heading {
+      background-color: #337ab7;
+      border-color: #337ab7;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <div id="sidebar-wrapper">
+      <div class="sidebar-brand">
+        <a href="homepage.html" style="color: white; text-decoration: none;">
+          <i class="fa fa-users"></i> Quản Lý Đoàn Viên
+        </a>
+      </div>
+      
+      <ul class="sidebar-nav">
+        <li class="active">
+          <a href="#"><i class="fa fa-dashboard"></i> Bảng điều khiển</a>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-user"></i> Đoàn viên</a>
+          <ul class="submenu">
+            <li><a href="#">Tất cả đoàn viên</a></li>
+            <li><a href="#">Thêm đoàn viên mới</a></li>
+            <li><a href="#">Phân loại đoàn viên</a></li>
+            <li><a href="#">Đánh giá xếp loại</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-sitemap"></i> Cơ cấu tổ chức</a>
+          <ul class="submenu">
+            <li><a href="#">Ban Chấp hành</a></li>
+            <li><a href="#">Văn phòng Đoàn</a></li>
+            <li><a href="#">Các Liên chi Đoàn</a></li>
+            <li><a href="#">Chi Đoàn</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-calendar"></i> Hoạt động Đoàn</a>
+          <ul class="submenu">
+            <li><a href="#">Tất cả hoạt động</a></li>
+            <li><a href="#">Thêm hoạt động mới</a></li>
+            <li><a href="#">Điểm danh tham gia</a></li>
+            <li><a href="#">Lịch hoạt động</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-newspaper-o"></i> Thông báo</a>
+        </li>
+        <li>
+          <a href="#"><i class="fa fa-picture-o"></i> Thư viện</a>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-money"></i> Đoàn phí</a>
+          <ul class="submenu">
+            <li><a href="#">Thu đoàn phí</a></li>
+            <li><a href="#">Chi đoàn phí</a></li>
+            <li><a href="#">Báo cáo tài chính</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-bar-chart"></i> Thống kê báo cáo</a>
+          <ul class="submenu">
+            <li><a href="#">Báo cáo đoàn viên</a></li>
+            <li><a href="#">Báo cáo hoạt động</a></li>
+            <li><a href="#">Báo cáo đánh giá</a></li>
+            <li><a href="#">Xuất báo cáo</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-users"></i> Người dùng</a>
+          <ul class="submenu">
+            <li><a href="#">Tất cả người dùng</a></li>
+            <li><a href="#">Thêm mới</a></li>
+            <li><a href="#">Phân quyền</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-wrench"></i> Công cụ</a>
+          <ul class="submenu">
+            <li><a href="#">Nhập dữ liệu</a></li>
+            <li><a href="#">Xuất dữ liệu</a></li>
+            <li><a href="#">Sao lưu hệ thống</a></li>
+          </ul>
+        </li>
+        <li class="has-submenu">
+          <a href="#"><i class="fa fa-cogs"></i> Cài đặt</a>
+          <ul class="submenu">
+            <li><a href="#">Cấu hình hệ thống</a></li>
+            <li><a href="#">Tùy chỉnh giao diện</a></li>
+            <li><a href="#">Thông báo</a></li>
+            <li><a href="#">Quyền riêng tư</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="pull-right">
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-plus"></i> Tạo mới <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Đoàn viên</a></li>
+            <li><a href="#">Hoạt động</a></li>
+            <li><a href="#">Thông báo</a></li>
+            <li><a href="#">Báo cáo</a></li>
+          </ul>
+        </div>
+        <div class="dropdown" style="margin-left: 15px;">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-user"></i> Admin <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Hồ sơ</a></li>
+            <li><a href="#">Đăng xuất</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <h1>Bảng điều khiển</h1>
+            
+            <div class="welcome-panel">
+              <h2>Chào mừng đến với Hệ thống Quản lý Đoàn viên!</h2>
+              <p>Hệ thống hỗ trợ quản lý thông tin đoàn viên và hoạt động đoàn của Học viện Công nghệ Bưu chính Viễn thông.</p>
+              <div class="row">
+                <div class="col-md-4">
+                  <h4><i class="fa fa-user-plus"></i> Quản lý đoàn viên</h4>
+                  <a href="#" class="btn btn-primary">Thêm đoàn viên mới</a>
+                </div>
+                <div class="col-md-4">
+                  <h4><i class="fa fa-calendar-plus-o"></i> Tổ chức hoạt động</h4>
+                  <a href="#" class="btn btn-default">Tạo hoạt động mới</a>
+                </div>
+                <div class="col-md-4">
+                  <h4><i class="fa fa-bar-chart"></i> Xem báo cáo</h4>
+                  <a href="#" class="btn btn-default">Tạo báo cáo</a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="quick-stats">
+              <div class="stat-box">
+                <h3>485</h3>
+                <p>Tổng số đoàn viên</p>
+              </div>
+              <div class="stat-box">
+                <h3>5</h3>
+                <p>Liên chi đoàn</p>
+              </div>
+              <div class="stat-box">
+                <h3>25</h3>
+                <p>Chi đoàn</p>
+              </div>
+              <div class="stat-box">
+                <h3>12</h3>
+                <p>Hoạt động trong tháng</p>
+              </div>
+            </div>
+            
+            <div class="dashboard-widgets">
+              <div class="dashboard-widget">
+                <div class="dashboard-widget-header">
+                  <i class="fa fa-tachometer"></i> Tổng quan hệ thống
+                </div>
+                <div class="dashboard-widget-content">
+                  <p>Phiên bản hệ thống: 1.2.0</p>
+                  <p>Cập nhật gần nhất: 08/04/2025</p>
+                  <p>Số lượng người dùng: 15</p>
+                  <p>Tình trạng: Hoạt động tốt</p>
+                </div>
+              </div>
+              
+              <div class="dashboard-widget">
+                <div class="dashboard-widget-header">
+                  <i class="fa fa-clock-o"></i> Hoạt động gần đây
+                </div>
+                <div class="dashboard-widget-content">
+                  <ul class="activity-list">
+                    <li>
+                      <div>Đoàn viên <strong>Nguyễn Văn A</strong> đã được thêm vào hệ thống</div>
+                      <div class="activity-time">8 giờ trước bởi Admin</div>
+                    </li>
+                    <li>
+                      <div>Hoạt động <strong>"Hiến máu tình nguyện"</strong> đã được tạo</div>
+                      <div class="activity-time">Hôm qua bởi Bí thư Đoàn</div>
+                    </li>
+                    <li>
+                      <div>Cập nhật thông tin cho <strong>35</strong> đoàn viên Liên chi CNTT1</div>
+                      <div class="activity-time">2 ngày trước bởi Bí thư Liên chi</div>
+                    </li>
+                    <li>
+                      <div>Báo cáo <strong>"Tổng kết hoạt động tháng 3/2025"</strong> đã được tạo</div>
+                      <div class="activity-time">3 ngày trước bởi Phó Bí thư</div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="dashboard-widget">
+                <div class="dashboard-widget-header">
+                  <i class="fa fa-bullhorn"></i> Thông báo nhanh
+                </div>
+                <div class="dashboard-widget-content">
+                  <form>
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Tiêu đề thông báo">
+                    </div>
+                    <div class="form-group">
+                      <textarea class="form-control" rows="3" placeholder="Nội dung thông báo"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <select class="form-control">
+                        <option>Gửi đến tất cả đoàn viên</option>
+                        <option>Liên chi CNTT1</option>
+                        <option>Liên chi KTĐT1</option>
+                        <option>Liên chi ĐPT</option>
+                        <option>Liên chi VT1</option>
+                        <option>Liên chi KTBĐ</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Gửi thông báo</button>
+                  </form>
+                </div>
+              </div>
+              
+              <div class="dashboard-widget">
+                <div class="dashboard-widget-header">
+                  <i class="fa fa-calendar"></i> Lịch hoạt động sắp tới
+                </div>
+                <div class="dashboard-widget-content">
+                  <ul class="activity-list">
+                    <li>
+                      <div><strong>15/04/2025</strong>: Hội nghị Đoàn viên</div>
+                      <div class="activity-time">Hội trường lớn, 14:00 - 17:00</div>
+                    </li>
+                    <li>
+                      <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                          const isLoggedIn = localStorage.getItem('isLoggedIn');
+                          const userRole = localStorage.getItem('userRole');
+                          
+                          // Kiểm tra quyền truy cập
+                          if (isLoggedIn !== 'true' || userRole !== 'admin') {
+                            alert('Bạn không có quyền truy cập trang này!');
+                            window.location.href = 'homepage.html';
+                            return;
+                          }
+                          
+                          // Thêm nút đăng xuất
+                          const logoutButton = document.createElement('button');
+                          logoutButton.className = 'btn btn-danger';
+                          logoutButton.innerHTML = '<i class="fa fa-sign-out"></i> Đăng xuất';
+                          logoutButton.style.position = 'absolute';
+                          logoutButton.style.top = '10px';
+                          logoutButton.style.right = '10px';
+                          document.body.appendChild(logoutButton);
+                          
+                          // Xử lý đăng xuất
+                          logoutButton.addEventListener('click', function() {
+                            localStorage.removeItem('isLoggedIn');
+                            localStorage.removeItem('userRole');
+                            alert('Đăng xuất thành công!');
+                            window.location.href = 'homepage.html';
+                          });
+                          
+                          // Thêm link về trang chủ
+                          const homeLink = document.createElement('a');
+                          homeLink.href = 'homepage.html';
+                          homeLink.className = 'btn btn-primary';
+                          homeLink.innerHTML = '<i class="fa fa-home"></i> Trang chủ';
+                          homeLink.style.position = 'absolute';
+                          homeLink.style.top = '10px';
+                          homeLink.style.right = '120px';
+                          document.body.appendChild(homeLink);
+                        });
+                      </script>
+                      
+                      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+                      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>

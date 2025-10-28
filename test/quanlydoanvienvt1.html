@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Đoàn Viên - Đoàn Thanh niên cộng sản Hồ Chí Minh - PTIT</title>
+    <!-- Bootstrap 3 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-blue: #1a75ff; /* Màu xanh blue chính */
+            --secondary-blue: #4d94ff; /* Màu xanh blue nhạt hơn */
+            --dark-blue: #0052cc; /* Màu xanh blue đậm */
+            --light-blue: #e6f0ff; /* Màu xanh blue rất nhạt */
+            --accent-red: #e30613; /* Màu đỏ từ logo PTIT */
+            --accent-yellow: #ffcc00; /* Màu vàng từ ngôi sao */
+            --accent-green: #1e7e34; /* Màu xanh lá từ logo Đoàn */
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            padding-top: 70px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Navbar styling */
+        .navbar-default {
+            background-color: var(--primary-blue);
+            border-color: var(--dark-blue);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-default .navbar-brand,
+        .navbar-default .navbar-nav > li > a {
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-default .navbar-nav > .active > a,
+        .navbar-default .navbar-nav > .active > a:focus,
+        .navbar-default .navbar-nav > .active > a:hover,
+        .navbar-default .navbar-nav > li > a:hover {
+            background-color: var(--dark-blue);
+            color: white;
+        }
+
+        .navbar-default .navbar-toggle {
+            border-color: white;
+        }
+
+        .navbar-default .navbar-toggle .icon-bar {
+            background-color: white;
+        }
+
+        .navbar-default .navbar-toggle:focus,
+        .navbar-default .navbar-toggle:hover {
+            background-color: var(--dark-blue);
+        }
+
+        .dropdown-menu {
+            background-color: var(--secondary-blue);
+            border: none;
+            border-radius: 0;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .dropdown-menu > li > a {
+            color: white;
+            padding: 10px 20px;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-menu > li > a:hover {
+            background-color: var(--dark-blue);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* Logo styling */
+        .navbar-brand {
+            padding: 5px 15px;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            display: inline-block;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Search box */
+        .search-box {
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 8px rgba(26, 117, 255, 0.3);
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            padding: 0 15px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box button:hover {
+            background-color: var(--dark-blue);
+        }
+
+        /* Department list */
+        .department-list {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .department-list h3 {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 15px;
+            margin: 0;
+            border-radius: 4px 4px 0 0;
+            font-size: 18px;
+        }
+
+        .department-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .department-list li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .department-list li:last-child {
+            border-bottom: none;
+        }
+
+        .department-list li:hover {
+            background-color: var(--light-blue);
+        }
+
+        .department-list li.active {
+            background-color: var(--light-blue);
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .department-list li a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+        }
+
+        .department-list .badge {
+            background-color: var(--primary-blue);
+            float: right;
+        }
+
+        /* Student table */
+        .student-table {
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .student-table h3 {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 15px;
+            margin: 0;
+            border-radius: 4px 4px 0 0;
+            font-size: 18px;
+        }
+
+        .table-responsive {
+            padding: 15px;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table > thead > tr > th {
+            background-color: var(--secondary-blue);
+            color: white;
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        .table > tbody > tr:hover {
+            background-color: var(--light-blue);
+        }
+
+        /* Pagination */
+        .pagination > li > a,
+        .pagination > li > span {
+            color: var(--primary-blue);
+        }
+
+        .pagination > .active > a,
+        .pagination > .active > a:focus,
+        .pagination > .active > a:hover,
+        .pagination > .active > span,
+        .pagination > .active > span:focus,
+        .pagination > .active > span:hover {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        /* Login dropdown */
+        .login-dropdown {
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        }
+
+        /* Footer styling */
+        .footer {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 40px 0;
+            margin-top: 50px;
+            box-shadow: 0 -5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer h4 {
+            color: var(--accent-yellow);
+            border-bottom: 1px solid var(--accent-yellow);
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--accent-yellow);
+            text-decoration: none;
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 767px) {
+            .department-list {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">
+                    <img src="https://vn-test-11.slatic.net/p/0faa4de381517b7a7e98acd87d98a43c.png" alt="PTIT Logo">
+                    <img src="https://i.gyazo.com/ad27bc12ca81e862ceb35328122757ee.png" alt="Đoàn Thanh Niên Logo" style="height: 38px;">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="homepage.html"><i class="fa fa-home"></i> Trang chủ</a></li>
+                    
+                    <!-- Dropdown Quản lý đoàn viên -->
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-users"></i> Quản lý đoàn viên <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="quanlydoanviencntt1.html"><i class="fa fa-angle-right"></i> Liên chi Đoàn khoa Công nghệ thông tin 1</a></li>
+                            <li><a href="quanlydoanviendtu1.html"><i class="fa fa-angle-right"></i> Liên chi Đoàn khoa Kỹ thuật Điện tử 1</a></li>
+                            <li><a href="quanlydoanviendpt.html"><i class="fa fa-angle-right"></i> Liên chi Đoàn khoa Đa phương tiện</a></li>
+                            <li><a href="quanlydoanvienvt1.html"><i class="fa fa-angle-right"></i> Liên chi Đoàn khoa Viễn thông 1</a></li>
+                            <li><a href="quanlydoanvienktbd.html"><i class="fa fa-angle-right"></i> Liên chi Đoàn Viện Kinh tế Bưu điện</a></li>
+                        </ul>
+                    </li>
+                    
+                    
+                
+                <!-- Login/User Profile Section -->
+                <ul class="nav navbar-nav navbar-right">
+                    <!-- Login Dropdown (hiển thị khi chưa đăng nhập) -->
+                    <li class="dropdown" id="loginDropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-sign-in"></i> Đăng nhập <span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu login-dropdown">
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <label for="username">Tên đăng nhập</label>
+                                    <input type="text" class="form-control" id="username" placeholder="Nhập tên đăng nhập">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Mật khẩu</label>
+                                    <input type="password" class="form-control" id="password" placeholder="Nhập mật khẩu">
+                                </div>
+                                <button type="button" class="btn btn-primary btn-block" onclick="login()">Đăng nhập</button>
+                            </form>
+                        </div>
+                    </li>
+                    
+                    <!-- User Profile Dropdown (hiển thị sau khi đăng nhập) -->
+                    <li class="dropdown" id="userDropdown" style="display: none;">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i> <span id="userName">Người dùng</span> <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" onclick="showProfile()"><i class="fa fa-id-card"></i> Thông tin cá nhân</a></li>
+                            <li><a href="#" onclick="logout()"><i class="fa fa-sign-out"></i> Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container fade-in">
+        <div class="row">
+            <div class="col-md-12">
+                <h2><i class="fa fa-users"></i> QUẢN LÝ ĐOÀN VIÊN</h2>
+                <hr>
+            </div>
+        </div>
+
+        <!-- Search Box -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="search-box">
+                    <input type="text" placeholder="Tìm kiếm đoàn viên..." id="searchInput">
+                    <button type="button"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Department List -->
+            <div class="col-md-3">
+                <div class="department-list">
+                    <h3><i class="fa fa-list"></i> DANH SÁCH CÁC ĐƠN VỊ</h3>
+                    <ul>
+                        <li><a href="quanlydoanviencntt1.html">Khoa Công nghệ thông tin 1 <span class="badge">45</span></a></li>
+                        <li><a href="quanlydoanviendtu1.html">Khoa Kĩ thuật Điện tử 1 <span class="badge">38</span></a></li>
+                        <li><a href="quanlydoanvienktbd.html">Khoa Tài chính Kế Toán <span class="badge">42</span></a></li>
+                        <li><a href="quanlydoanviendpt.html">Khoa Đa phương tiện <span class="badge">30</span></a></li>
+                        <li class="active"><a href="quanlydoanvienvt1.html">Khoa Viễn thông 1 <span class="badge">25</span></a></li>
+                        <li><a href="quanlydoanvienmkt.html">Khoa Marketing <span class="badge">35</span></a></li>
+                        <li><a href="#" class="text-center">Tổng số Đoàn viên <span class="badge">215</span>                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Student Table -->
+            <div class="col-md-9">
+                <div class="student-table">
+                    <h3><i class="fa fa-list"></i> DANH SÁCH ĐOÀN VIÊN KHOA VIỄN THÔNG 1</h3>
+                    <!-- Thêm các nút chức năng vào phần đầu của bảng -->
+<div class="admin-controls" id="adminControls" style="display: none; margin-bottom: 15px;">
+    <button type="button" class="btn btn-success" onclick="showAddModal()">
+        <i class="fa fa-plus"></i> Thêm đoàn viên mới
+    </button>
+</div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Họ tên</th>
+                                    <th>Giới tính</th>
+                                    <th>Mã sinh viên</th>
+                                    <th>Lớp</th>
+                                    <th>Ngày sinh</th>
+                                    <!-- Thêm cột Actions vào bảng -->
+<th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Nguyễn Văn An</td>
+                                    <td>Nam</td>
+                                    <td>B20DCCN001</td>
+                                    <td>D20CQCN01</td>
+                                    <td>15/05/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Trần Thị Bình</td>
+                                    <td>Nữ</td>
+                                    <td>B20DCCN045</td>
+                                    <td>D20CQCN02</td>
+                                    <td>22/08/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Lê Văn Cường</td>
+                                    <td>Nam</td>
+                                    <td>B20DCCN078</td>
+                                    <td>D20CQCN01</td>
+                                    <td>10/03/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>Phạm Thị Dung</td>
+                                    <td>Nữ</td>
+                                    <td>B20DCCN102</td>
+                                    <td>D20CQCN03</td>
+                                    <td>05/11/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>Hoàng Văn Dũng</td>
+                                    <td>Nam</td>
+                                    <td>B20DCCN125</td>
+                                    <td>D20CQCN02</td>
+                                    <td>30/12/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>Vũ Thị Hà</td>
+                                    <td>Nữ</td>
+                                    <td>B20DCCN156</td>
+                                    <td>D20CQCN01</td>
+                                    <td>18/07/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>Đỗ Văn Hùng</td>
+                                    <td>Nam</td>
+                                    <td>B20DCCN189</td>
+                                    <td>D20CQCN03</td>
+                                    <td>25/04/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>Ngô Thị Lan</td>
+                                    <td>Nữ</td>
+                                    <td>B20DCCN210</td>
+                                    <td>D20CQCN02</td>
+                                    <td>12/09/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>Trịnh Văn Minh</td>
+                                    <td>Nam</td>
+                                    <td>B20DCCN254</td>
+                                    <td>D20CQCN01</td>
+                                    <td>08/01/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td>Lý Thị Ngọc</td>
+                                    <td>Nữ</td>
+                                    <td>B20DCCN287</td>
+                                    <td>D20CQCN03</td>
+                                    <td>20/06/2002</td>
+                                    <!-- Thêm nút sửa và xóa vào mỗi hàng trong bảng -->
+<td class="action-buttons" style="display: none;">
+    <button class="btn btn-sm btn-primary" onclick="showEditModal(this)">
+        <i class="fa fa-edit"></i> Sửa
+    </button>
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(this)">
+        <i class="fa fa-trash"></i> Xóa
+    </button>
+</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination">
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>
+                            <li><a href="#">5</a></li>
+                            <li>
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>Hệ Thống Quản Lý Đoàn Viên</h4>
+                    <p>Đoàn Thanh niên cộng sản Hồ Chí Minh</p>
+                    <p>Học viện Công Nghệ Bưu Chính Viễn Thông</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Liên hệ</h4>
+                    <p><i class="fa fa-map-marker"></i> 122 Hoàng Quốc Việt, Cầu Giấy, Hà Nội</p>
+                    <p><i class="fa fa-phone"></i> (024) 3756 2963</p>
+                    <p><i class="fa fa-envelope"></i> doanthanhnien@ptit.edu.vn</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Các đường dẫn liên kết</h4>
+                    <p>
+                        <a href="https://ptit.edu.vn/sinh-vien/doan-thanh-nien/" target="_blank" class="btn btn-social">
+                            <i class="fa fa-globe"></i> Trang chủ Đoàn Thanh niên
+                        </a>
+                    </p>
+                    <p>
+                        <a href="https://www.facebook.com/DoanThanhNienHVCNBCVT" target="_blank" class="btn btn-social">
+                            <i class="fa fa-facebook"></i> Fanpage Facebook
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <p>&copy; 2025 Đoàn Thanh niên PTIT. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Modal thêm/sửa đoàn viên -->
+<div class="modal fade" id="studentModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="modalTitle">Thêm đoàn viên mới</h4>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <input type="hidden" id="studentId">
+                    <div class="form-group">
+                        <label for="fullName">Họ tên</label>
+                        <input type="text" class="form-control" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <div>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" value="Nam" checked> Nam
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" value="Nữ"> Nữ
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentCode">Mã sinh viên</label>
+                        <input type="text" class="form-control" id="studentCode" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="className">Lớp</label>
+                        <input type="text" class="form-control" id="className" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthDate">Ngày sinh</label>
+                        <input type="text" class="form-control" id="birthDate" placeholder="DD/MM/YYYY" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" onclick="saveStudent()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        function login() {
+            // Kiểm tra thông tin đăng nhập
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            
+            if (username === 'admin' && password === 'Hieu1704') {
+                // Đăng nhập thành công
+                $('#loginDropdown').hide();
+                $('#userDropdown').show();
+                $('#userName').text('Admin'); // Hiển thị tên người dùng
+                alert('Đăng nhập thành công!');
+                sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('userName', 'Admin');
+            } else {
+                // Đăng nhập thất bại
+                alert('Tên đăng nhập hoặc mật khẩu không đúng!');
+            }
+        }
+        $(document).ready(function() {
+            // Kiểm tra nếu người dùng đã đăng nhập từ trước
+            if (sessionStorage.getItem('isLoggedIn') === 'true') {
+                $('#loginDropdown').hide();
+                $('#userDropdown').show();
+                $('#userName').text(sessionStorage.getItem('userName'));
+                
+                // Kiểm tra quyền admin
+                checkAdminAccess();
+            }
+            
+            // Các code khởi tạo khác...
+        });
+
+        function logout() {
+            // Xử lý đăng xuất
+            $('#loginDropdown').show();
+            $('#userDropdown').hide();
+            $('#profileSection').hide();
+            
+            // Xóa dữ liệu đăng nhập
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            // Xóa dữ liệu trong sessionStorage
+    sessionStorage.removeItem('isLoggedIn');
+    sessionStorage.removeItem('userName');
+            
+            alert('Đã đăng xuất thành công!');
+            
+            // Ngăn người dùng quay lại trang trước bằng nút Return
+            history.pushState(null, null, location.href);
+            window.onpopstate = function(event) {
+                history.go(1);
+            };
+        }
+
+        function showProfile() {
+            $('#profileSection').show();
+            // Hiển thị thông tin người dùng admin
+            $('#profileName').text('Admin');
+            $('#profileRole').text('Quản trị viên');
+            $('#fullName').val('Admin');
+            $('#email').val('admin@ptit.edu.vn');
+            $('#phone').val('0123456789');
+        }
+
+        function updateProfile() {
+            // Xử lý cập nhật thông tin cá nhân
+            alert('Thông tin cá nhân đã được cập nhật!');
+        }
+
+        // Tìm kiếm đoàn viên
+        $(document).ready(function(){
+            $("#searchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("table tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <script>
+    // Kiểm tra đăng nhập và hiển thị các nút chức năng
+    function checkAdminAccess() {
+        // Kiểm tra xem người dùng đã đăng nhập là admin chưa
+        if ($('#userDropdown').is(':visible') && $('#userName').text() === 'Admin') {
+            // Hiển thị các nút chức năng
+            $('#adminControls').show();
+            $('.action-buttons').show();
+        } else {
+            // Ẩn các nút chức năng
+            $('#adminControls').hide();
+            $('.action-buttons').hide();
+        }
+    }
+    
+    // Gọi hàm kiểm tra khi trang được tải
+    $(document).ready(function() {
+        checkAdminAccess();
+    });
+    
+    // Sửa hàm login để gọi checkAdminAccess sau khi đăng nhập
+    function login() {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        
+        if (username === 'admin' && password === 'Hieu1704') {
+            $('#loginDropdown').hide();
+            $('#userDropdown').show();
+            $('#userName').text('Admin');
+            alert('Đăng nhập thành công!');
+            
+            // Kiểm tra quyền admin sau khi đăng nhập
+            checkAdminAccess();
+        } else {
+            alert('Tên đăng nhập hoặc mật khẩu không đúng!');
+        }
+    }
+    
+    // Sửa hàm logout để ẩn các nút chức năng
+    function logout() {
+        $('#loginDropdown').show();
+        $('#userDropdown').hide();
+        $('#profileSection').hide();
+        
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+        
+        // Ẩn các nút chức năng sau khi đăng xuất
+        $('#adminControls').hide();
+        $('.action-buttons').hide();
+        
+        alert('Đã đăng xuất thành công!');
+        
+        history.pushState(null, null, location.href);
+        window.onpopstate = function(event) {
+            history.go(1);
+        };
+    }
+    
+    // Hiển thị modal thêm đoàn viên mới
+    function showAddModal() {
+        $('#modalTitle').text('Thêm đoàn viên mới');
+        $('#studentId').val('');
+        $('#studentForm')[0].reset();
+        $('#studentModal').modal('show');
+    }
+    
+    // Hiển thị modal sửa đoàn viên
+    function showEditModal(button) {
+        $('#modalTitle').text('Sửa thông tin đoàn viên');
+        
+        // Lấy dữ liệu từ hàng được chọn
+        var row = $(button).closest('tr');
+        var cells = row.find('td');
+        
+        $('#studentId').val($(cells[0]).text());
+        $('#fullName').val($(cells[1]).text());
+        $('input[name="gender"][value="' + $(cells[2]).text() + '"]').prop('checked', true);
+        $('#studentCode').val($(cells[3]).text());
+        $('#className').val($(cells[4]).text());
+        $('#birthDate').val($(cells[5]).text());
+        
+        $('#studentModal').modal('show');
+    }
+    
+    // Lưu thông tin đoàn viên
+    function saveStudent() {
+        // Kiểm tra form
+        if (!$('#studentForm')[0].checkValidity()) {
+            alert('Vui lòng điền đầy đủ thông tin!');
+            return;
+        }
+        
+        var id = $('#studentId').val();
+        var fullName = $('#fullName').val();
+        var gender = $('input[name="gender"]:checked').val();
+        var studentCode = $('#studentCode').val();
+        var className = $('#className').val();
+        var birthDate = $('#birthDate').val();
+        
+        if (id === '') {
+            // Thêm mới đoàn viên
+            var table = $('table tbody');
+            var rowCount = table.find('tr').length;
+            
+            var newRow = '<tr>' +
+                '<td>' + (rowCount + 1) + '</td>' +
+                '<td>' + fullName + '</td>' +
+                '<td>' + gender + '</td>' +
+                '<td>' + studentCode + '</td>' +
+                '<td>' + className + '</td>' +
+                '<td>' + birthDate + '</td>' +
+                '<td class="action-buttons">' +
+                '<button class="btn btn-sm btn-primary" onclick="showEditModal(this)"><i class="fa fa-edit"></i> Sửa</button> ' +
+                '<button class="btn btn-sm btn-danger" onclick="confirmDelete(this)"><i class="fa fa-trash"></i> Xóa</button>' +
+                '</td>' +
+                '</tr>';
+            
+            table.append(newRow);
+            alert('Thêm đoàn viên mới thành công!');
+        } else {
+            // Cập nhật thông tin đoàn viên
+            var row = $('table tbody tr').eq(parseInt(id) - 1);
+            var cells = row.find('td');
+            
+            $(cells[1]).text(fullName);
+            $(cells[2]).text(gender);
+            $(cells[3]).text(studentCode);
+            $(cells[4]).text(className);
+            $(cells[5]).text(birthDate);
+            
+            alert('Cập nhật thông tin đoàn viên thành công!');
+        }
+        
+        $('#studentModal').modal('hide');
+    }
+    
+    // Xác nhận xóa đoàn viên
+    function confirmDelete(button) {
+        if (confirm('Bạn có chắc chắn muốn xóa đoàn viên này không?')) {
+            $(button).closest('tr').remove();
+            
+            // Cập nhật lại STT
+            $('table tbody tr').each(function(index) {
+                $(this).find('td:first').text(index + 1);
+            });
+            
+            alert('Xóa đoàn viên thành công!');
+        }
+    }
+</script>
+</body>
+</html>
+

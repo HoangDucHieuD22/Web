@@ -1,0 +1,28 @@
+[
+    {
+        "id": 1,
+        "fullname": "Ho\u00e0ng \u0110\u1ee9c Hi\u1ebfu",
+        "email": "hoanghieu170404@gmail.com",
+        "address": "CT4 M\u1ec5 tr\u00ec Nam t\u1eeb li\u00eam H\u00e0 N\u1ed9i",
+        "phone": "0387165938",
+        "username": "B22DCVT192",
+        "password": "$2y$10$1XwIMCxVihQrlqdP4M7bHeHZTbqtpoF7bLCHrUItradSquhTc.MDu",
+        "class": "E22CQCN03-B",
+        "student_id": "B22dcvt192",
+        "dob": "2025-04-10",
+        "created_at": "2025-04-10 09:18:50"
+    },
+    {
+        "id": "67f7753ca569b",
+        "fullname": "B\u1ea1ch H\u1ed3ng Vinh",
+        "dob": "2025-04-03",
+        "student_id": "B22dcvt193",
+        "class": "E22CQCN03-B",
+        "address": "HBT HN",
+        "phone": "0387165938",
+        "email": "hieuhoang170404@gmail.com",
+        "username": "vinh",
+        "password": "$2y$10$Pp.QArGOgAb\/zRmlAPIX9OTapjGAu3avmFIH8e1cld\/c6Jk.fHE7S",
+        "created_at": "2025-04-10 09:37:32"
+    }
+]

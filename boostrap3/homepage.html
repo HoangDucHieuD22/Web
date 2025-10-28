@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ thống Quản lý Đoàn viên</title>
+  <!-- Bootstrap 3 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      padding-top: 70px;
+      background-color: #f5f5f5;
+    }
+    .navbar-brand img {
+      height: 30px;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    .avatar-container {
+      padding: 10px 15px;
+    }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .jumbotron {
+      background-image: url('https://example.com/background.jpg');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      position: relative;
+      background-color: #337ab7;
+    }
+    .jumbotron:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .jumbotron .container {
+      position: relative;
+      z-index: 2;
+    }
+    .profile-card {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .profile-card h3 {
+      margin-top: 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      color: #337ab7;
+    }
+    .profile-info {
+      margin-bottom: 0;
+    }
+    .profile-info dt {
+      width: 150px;
+    }
+    .profile-info dd {
+      margin-left: 170px;
+    }
+    .stats-card {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .stats-card h3 {
+      margin-top: 0;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+      color: #337ab7;
+    }
+    .news-item {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    .news-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+    .news-date {
+      color: #777;
+      font-size: 12px;
+    }
+    .news-title {
+      margin-top: 5px;
+      margin-bottom: 10px;
+    }
+    footer {
+      background-color: #222;
+      color: #9d9d9d;
+      padding: 30px 0;
+      margin-top: 30px;
+    }
+    footer a {
+      color: #9d9d9d;
+    }
+    footer a:hover {
+      color: white;
+      text-decoration: none;
+    }
+    .stat-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #337ab7;
+    }
+    .stat-label {
+      color: #777;
+      font-size: 14px;
+    }
+    .panel-primary > .panel-heading {
+      background-color: #337ab7;
+      border-color: #337ab7;
+    }
+    .user-info {
+      display: none;
+    }
+    .login-btn {
+      display: block;
+    }
+    .admin-link {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header/Navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="https://example.com/logo.png" alt="Logo">
+        Đoàn Thanh niên
+      </a>
+    </div>
+    
+    <div class="collapse navbar-collapse" id="navbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#"><i class="fa fa-home"></i> Trang chủ</a></li>
+        <li><a href="#"><i class="fa fa-newspaper-o"></i> Tin tức</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-users"></i> Quản lý Đoàn viên <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Liên chi Đoàn khoa Công nghệ thông tin 1</a></li>
+            <li><a href="#">Liên chi Đoàn khoa Kỹ thuật Điện tử 1</a></li>
+            <li><a href="#">Liên chi Đoàn khoa Đa phương tiện</a></li>
+            <li><a href="#">Liên chi Đoàn khoa Viễn thông 1</a></li>
+            <li><a href="#">Liên chi Đoàn Viện Kinh tế Bưu điện</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-sitemap"></i> Cơ cấu tổ chức <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Ban Chấp hành</a></li>
+            <li><a href="#">Văn phòng Đoàn</a></li>
+            <li><a href="#">Các đơn vị Liên chi</a></li>
+          </ul>
+        </li>
+      </ul>
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+        <!-- Nút đăng nhập - hiển thị khi chưa đăng nhập -->
+        <li id="login-button"><a href="dangnhap.html"><i class="fa fa-sign-in"></i> Đăng nhập</a></li>
+        
+        <!-- Thông tin người dùng - hiển thị khi đã đăng nhập -->
+        <li id="user-info" style="display: none;">
+          <a href="#"><i class="fa fa-user"></i> <span id="fullname-display">Tên người dùng</span></a>
+        </li>
+        
+        <!-- Nút đăng xuất - hiển thị khi đã đăng nhập -->
+        <li id="logout-button" style="display: none;">
+          <a href="#" id="logout-link"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Jumbotron/Hero Section -->
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Hệ thống Quản lý Đoàn viên</h1>
+      <p>Đoàn Thanh niên Cộng sản Hồ Chí Minh - Học viện Công nghệ Bưu chính Viễn thông</p>
+      <p>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Tìm hiểu thêm</a>
+        <a class="btn btn-default btn-lg" href="#" role="button">Đăng ký hoạt động</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <!-- Left Column -->
+      <div class="col-md-4">
+        <!-- Profile Card -->
+        <div class="profile-card user-info">
+          <h3><i class="fa fa-user"></i> Thông tin cá nhân</h3>
+          <dl class="dl-horizontal profile-info">
+            <dt>Họ tên:</dt>
+            <dd id="profile-fullname">Nguyễn Văn A</dd>
+            
+            <dt>Mã Sinh viên:</dt>
+            <dd id="profile-studentid">B20DCCN001</dd>
+            
+            <dt>Lớp:</dt>
+            <dd id="profile-class">D20CQCN01-B</dd>
+            
+            <dt>Ngành:</dt>
+            <dd id="profile-major">Công nghệ thông tin</dd>
+          </dl>
+        </div>
+        
+        <!-- Stats Card -->
+        <div class="stats-card">
+          <h3><i class="fa fa-bar-chart"></i> Thống kê Đoàn viên</h3>
+          <div class="row text-center">
+            <div class="col-xs-6">
+              <div class="stat-number">120</div>
+              <div class="stat-label">Đoàn viên CNTT1</div>
+            </div>
+            <div class="col-xs-6">
+              <div class="stat-number">95</div>
+              <div class="stat-label">Đoàn viên KTĐT1</div>
+            </div>
+          </div>
+          <hr>
+          <div class="row text-center">
+            <div class="col-xs-4">
+              <div class="stat-number">85</div>
+              <div class="stat-label">Đoàn viên ĐPT</div>
+            </div>
+            <div class="col-xs-4">
+              <div class="stat-number">110</div>
+              <div class="stat-label">Đoàn viên VT1</div>
+            </div>
+            <div class="col-xs-4">
+              <div class="stat-number">75</div>
+              <div class="stat-label">Đoàn viên KTBĐ</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Upcoming Events -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-calendar"></i> Sự kiện sắp tới</h3>
+          </div>
+          <div class="panel-body">
+            <ul class="list-unstyled">
+              <li><i class="fa fa-clock-o"></i> 15/04/2025: Hội nghị Đoàn viên</li>
+              <li><i class="fa fa-clock-o"></i> 20/04/2025: Hiến máu tình nguyện</li>
+              <li><i class="fa fa-clock-o"></i> 01/05/2025: Chương trình Mùa hè xanh</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column -->
+      <div class="col-md-8">
+        <!-- News Section -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-newspaper-o"></i> Tin tức mới nhất</h3>
+          </div>
+          <div class="panel-body">
+            <div class="news-item">
+              <div class="news-date">
+                <i class="fa fa-calendar"></i> 10/04/2023
+              </div>
+              <h4 class="news-title">Khai mạc Đại hội Đoàn Thanh niên Học viện nhiệm kỳ 2023-2025</h4>
+              <p>Sáng ngày 10/04/2023, tại Hội trường lớn đã diễn ra Lễ khai mạc Đại hội Đoàn Thanh niên Học viện Công nghệ Bưu chính Viễn thông nhiệm kỳ 2023-2025 với sự tham gia của hơn 500 đại biểu...</p>
+              <a href="#" class="btn btn-sm btn-primary">Đọc tiếp</a>
+            </div>
+            
+            <div class="news-item">
+              <div class="news-date">
+                <i class="fa fa-calendar"></i> 05/04/2023
+              </div>
+              <h4 class="news-title">Kết quả cuộc thi "Ý tưởng sáng tạo sinh viên" năm 2023</h4>
+              <p>Ban tổ chức cuộc thi "Ý tưởng sáng tạo sinh viên" năm 2023 vừa công bố kết quả chung cuộc. Theo đó, giải Nhất thuộc về nhóm sinh viên lớp D20CQCN03 với dự án "Ứng dụng AI trong hỗ trợ người khuyết tật"...</p>
+              <a href="#" class="btn btn-sm btn-primary">Đọc tiếp</a>
+            </div>
+            
+            <div class="news-item">
+              <div class="news-date">
+                <i class="fa fa-calendar"></i> 01/04/2023
+              </div>
+              <h4 class="news-title">Thông báo đăng ký tham gia chiến dịch tình nguyện "Mùa hè xanh 2023"</h4>
+              <p>Đoàn Thanh niên Học viện thông báo kế hoạch tổ chức chiến dịch tình nguyện "Mùa hè xanh 2023". Thời gian đăng ký: từ ngày 01/04 đến 15/04/2023. Đối tượng: Tất cả đoàn viên, sinh viên Học viện...</p>
+              <a href="#" class="btn btn-sm btn-primary">Đọc tiếp</a>
+            </div>
+          </div>
+          <div class="panel-footer text-right">
+            <a href="#">Xem tất cả tin tức <i class="fa fa-arrow-right"></i></a>
+          </div>
+        </div>
+        
+        <!-- Activities Section -->
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h3 class="panel-title"><i class="fa fa-star"></i> Hoạt động nổi bật</h3>
+          </div>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="thumbnail">
+                  <img src="https://example.com/activity1.jpg" alt="Hoạt động 1">
+                  <div class="caption">
+                    <h4>Hiến máu tình nguyện</h4>
+                    <p>Chương trình hiến máu tình nguyện đợt 1 năm 2023 đã thu hút hơn 200 đoàn viên tham gia.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="thumbnail">
+                  <img src="https://example.com/activity2.jpg" alt="Hoạt động 2">
+                  <div class="caption">
+                    <h4>Hội thao sinh viên</h4>
+                    <p>Hội thao sinh viên năm 2023 với nhiều môn thi đấu hấp dẫn đã diễn ra thành công tốt đẹp.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <h4>Đoàn Thanh niên Học viện</h4>
+          <p>Hệ thống quản lý thông tin Đoàn viên và hoạt động Đoàn Thanh niên Học viện Công nghệ Bưu chính Viễn thông.</p>
+        </div>
+        <div class="col-md-4">
+          <h4>Liên hệ</h4>
+          <ul class="list-unstyled">
+            <li><i class="fa fa-map-marker"></i> 122 Hoàng Quốc Việt, Cầu Giấy, Hà Nội</li>
+            <li><i class="fa fa-phone"></i> (024) 3756 2963</li>
+            <li><i class="fa fa-envelope"></i> doanthanhnien@ptit.edu.vn</li>
+          </ul>
+        </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const userRole = localStorage.getItem('userRole');
+            
+            // Tìm các phần tử trong trang
+            const loginButton = document.querySelector('a[href="dangnhap.html"]');
+            const userInfoSection = document.querySelector('.profile-card');
+            const adminLink = document.createElement('li');
+            adminLink.innerHTML = '<a href="admin.html"><i class="fa fa-dashboard"></i> Quản trị</a>';
+            
+            if (isLoggedIn === 'true') {
+              // Ẩn nút đăng nhập
+              if (loginButton) loginButton.parentElement.style.display = 'none';
+              
+              // Xác định tên hiển thị dựa vào vai trò
+              let displayName;
+              if (userRole === 'admin') {
+                displayName = 'Admin'; // Hiển thị "Admin" cho tài khoản admin
+              } else {
+                // Ưu tiên lấy họ tên đầy đủ từ form đăng ký
+                displayName = localStorage.getItem('registered_fullname') || 
+                             localStorage.getItem('registered_username') || 
+                             'Người dùng';
+              }
+              
+              // Tạo dropdown người dùng
+              const userDropdown = document.createElement('li');
+              userDropdown.className = 'dropdown';
+              userDropdown.innerHTML = `
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <i class="fa fa-user"></i> ${displayName} <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#"><i class="fa fa-user"></i> Hồ sơ</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#" id="logout-btn"><i class="fa fa-sign-out"></i> Đăng xuất</a></li>
+                </ul>
+              `;
+              
+              // Thêm link admin nếu có quyền
+              if (userRole === 'admin') {
+                userDropdown.querySelector('.dropdown-menu').insertBefore(
+                  adminLink, 
+                  userDropdown.querySelector('.divider')
+                );
+              }
+              
+              // Thêm dropdown vào navbar
+              document.querySelector('.navbar-right').appendChild(userDropdown);
+              
+              // Hiển thị thông tin người dùng trong profile card
+              if (userInfoSection) {
+                userInfoSection.style.display = 'block';
+                
+                // Cập nhật các thông tin từ đăng ký
+                const nameElement = userInfoSection.querySelector('dd:nth-of-type(1)');
+                const studentIdElement = userInfoSection.querySelector('dd:nth-of-type(2)');
+                const classElement = userInfoSection.querySelector('dd:nth-of-type(3)');
+                const majorElement = userInfoSection.querySelector('dd:nth-of-type(4)');
+                
+                if (nameElement) nameElement.textContent = displayName;
+                if (studentIdElement) studentIdElement.textContent = localStorage.getItem('registered_studentId') || 'Chưa cập nhật';
+                if (classElement) classElement.textContent = localStorage.getItem('registered_class') || 'Chưa cập nhật';
+                if (majorElement) majorElement.textContent = localStorage.getItem('registered_major') || 'Chưa cập nhật';
+              }
+              
+              // Xử lý đăng xuất
+              document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userRole');
+                alert('Đăng xuất thành công!');
+                window.location.reload();
+              });
+            }
+          });
+          
+          
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
